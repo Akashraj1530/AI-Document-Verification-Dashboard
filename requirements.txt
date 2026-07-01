@@ -1,5 +1,6 @@
-flask
+Flask
+gunicorn
 pytesseract
-pillow
+Pillow
 opencv-python
 pdf2image
