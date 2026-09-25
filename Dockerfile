@@ -24,4 +24,4 @@ COPY . .
 RUN mkdir -p uploads
 
 # Start Flask application with Gunicorn
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-10000} app:app"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8080} app:app"]
