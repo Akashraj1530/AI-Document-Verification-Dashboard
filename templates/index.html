@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DocVerify AI</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', sans-serif;
+        }
+
+        body{
+            background:#0f172a;
+            color:white;
+            padding:30px;
+        }
+
+        .header{
+            margin-bottom:30px;
+        }
+
+        .header h1{
+            font-size:50px;
+            color:#60a5fa;
+        }
+
+        .header p{
+            font-size:18px;
+            color:#94a3b8;
+        }
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-bottom:30px;
+        }
+
+        .card{
+            background:#1e293b;
+            padding:30px;
+            border-radius:18px;
+            text-align:center;
+            box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .card h2{
+            color:#60a5fa;
+            font-size:42px;
+            margin-bottom:10px;
+        }
+
+        .card p{
+            font-size:18px;
+        }
+
+        .main{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:25px;
+            align-items:start;
+        }
+
+        .upload-box,
+        .result-box{
+            background:#1e293b;
+            padding:30px;
+            border-radius:18px;
+            min-height:350px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .upload-box h2,
+        .result-box h2{
+            margin-bottom:20px;
+        }
+
+        input[type=file]{
+            width:100%;
+            padding:15px;
+            border:2px dashed #60a5fa;
+            border-radius:10px;
+            background:#0f172a;
+            color:white;
+            cursor:pointer;
+        }
+
+        button{
+            width:100%;
+            margin-top:20px;
+            padding:15px;
+            border:none;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            font-size:18px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .result-box{
+            display:flex;
+            flex-direction:column;
+        }
+
+        .placeholder{
+            margin:auto;
+            text-align:center;
+            color:#94a3b8;
+        }
+
+        .verified{
+            color:#22c55e;
+            font-size:30px;
+            font-weight:bold;
+        }
+
+        .rejected{
+            color:#ef4444;
+            font-size:30px;
+            font-weight:bold;
+        }
+
+        .result-details{
+            margin-top:15px;
+        }
+
+        .result-details p{
+            margin:12px 0;
+            font-size:18px;
+        }
+
+        @media(max-width:900px){
+
+            .main{
+                grid-template-columns:1fr;
+            }
+
+            .header h1{
+                font-size:38px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <div class="header">
+        <h1>AI Document Verification</h1>
+<p>Smart OCR-Based Document Validation System</p>
+    </div>
+
+    <div class="stats">
+
+        <div class="card">
+            <h2>{{ total_scans }}</h2>
+            <p>Total Scans</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ verified_count }}</h2>
+            <p>Verified</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ rejected_count }}</h2>
+            <p>Rejected</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ success_rate }}%</h2>
+            <p>Success Rate</p>
+        </div>
+
+    </div>
+
+    <div class="main">
+
+        <div class="upload-box">
+
+            <h2>Verify Document</h2>
+
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+
+                <input type="file" name="document" required>
+
+                <button type="submit">
+                    Verify Document
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="result-box">
+
+            <h2>Verification Results</h2>
+
+            {% if result %}
+
+                <h3 class="{{ result_color }}">
+                    {{ result }}
+                </h3>
+
+                <div class="result-details">
+
+                    <p><b>Email:</b> {{ email }}</p>
+<p><b>Mobile:</b> {{ mobile }}</p>
+<p><b>GST:</b> {{ gst }}</p>
+<p><b>Company:</b> {{ company }}</p>
+
+<br>
+
+<h3>Verification Remarks</h3>
+
+{% if reasons %}
+<ul>
+    {% for reason in reasons %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p style="color:limegreen;">
+    ✓ No Issues Found
+</p>
+{% endif %}
+
+<br>
+
+{% if result == "VERIFIED" %}
+<br><br>
+
+<a href="/download"
+style="
+background:#22c55e;
+color:white;
+padding:12px 20px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+display:inline-block;">
+Download Verified PDF
+</a>
+
+{% endif %}
+                </div>
+
+            {% else %}
+
+                <div class="placeholder">
+
+                    <h3>Upload a Document</h3>
+
+                    <br>
+
+                    <p>
+                        Results will appear here after verification
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+</html>
